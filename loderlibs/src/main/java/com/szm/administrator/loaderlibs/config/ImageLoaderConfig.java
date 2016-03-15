@@ -14,7 +14,7 @@ public class ImageLoaderConfig {
     //加载策略
     private LoadPolicy loadPolicy;
     //线程数
-    private int threadCount;
+    private int threadCount=3;
     //图片显示配置
     private DisplayConfig config;
 

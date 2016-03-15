@@ -20,10 +20,25 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
     private LoadPolicy loadPolicy;
     //缓存策略
     private BitmapCacheAPI bitmapCacheAPI;
+    //默认显示的图片
+    private DisplayConfig displayConfig=new DisplayConfig();
+    //显示控件
+    private ImageView imageView;
+    //监听回调
+    public ImageListener listener;
+    //图片路径
+    private String imgUri;
+
 
     public BitmapRequest(ImageView imageView, String uri, DisplayConfig displayConfig, ImageListener imageListener, ImageLoaderConfig config){
         loadPolicy=config.getLoadPolicy();
         bitmapCacheAPI=config.getBitmapCache();
+        if(displayConfig!=null){
+            this.displayConfig=displayConfig;
+        }
+        this.imageView=imageView;
+        listener=imageListener;
+        imgUri=uri;
     }
 
     /**
@@ -40,6 +55,46 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
      */
     public int getSerialNO() {
         return serialNO;
+    }
+
+    /**
+     * 获取使用的加载策略
+     * @return
+     */
+    public LoadPolicy getLoadPolicy() {
+        return loadPolicy;
+    }
+
+    /**
+     * 获取使用的缓存策略
+     * @return
+     */
+    public BitmapCacheAPI getBitmapCacheAPI() {
+        return bitmapCacheAPI;
+    }
+
+    /**
+     * 获取默认显示的配置对象
+     * @return
+     */
+    public DisplayConfig getDisplayConfig() {
+        return displayConfig;
+    }
+
+    /**
+     * 获取显示控件
+     * @return
+     */
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    /**
+     * 获取图片路径
+     * @return
+     */
+    public String getImgUri() {
+        return imgUri;
     }
 
     @Override

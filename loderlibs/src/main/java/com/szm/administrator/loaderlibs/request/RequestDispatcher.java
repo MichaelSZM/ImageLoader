@@ -2,6 +2,9 @@ package com.szm.administrator.loaderlibs.request;
 
 import android.util.Log;
 
+import com.szm.administrator.loaderlibs.loader.LoaderManager;
+import com.szm.administrator.loaderlibs.loader.api.LoaderAPI;
+
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -24,9 +27,27 @@ public class RequestDispatcher extends Thread{
             try {
                 BitmapRequest bitmapRequest=requestQueue.take();
                 Log.i("info--","deal request with serialNO: "+bitmapRequest.getSerialNO());
+                //解析图片地址，获取对象的加载器
+                String schema=parseSchema(bitmapRequest.getImgUri());
+                LoaderAPI loader=LoaderManager.getInstance().getLoader(schema);
+                loader.loadBitmap(bitmapRequest);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 解析图片地址，获得schema
+     * @param imgUri
+     * @return
+     */
+    private String parseSchema(String imgUri) {
+        if(imgUri.contains("//")){
+            return imgUri.split("//")[0];
+        }else{
+            Log.i("michael","schema 不符合格式");
+        }
+        return null;
     }
 }
