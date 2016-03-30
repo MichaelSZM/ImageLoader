@@ -33,7 +33,7 @@ public class RequestQueue {
      * 开始转发
      */
     public void start(){
-        stop();;
+        stop();
         startDispatchers();
     }
 

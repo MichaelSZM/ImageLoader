@@ -76,7 +76,7 @@ public class ImageLoaderConfig {
          * @return
          */
         public Builder setErroeImg(int id ){
-            imageLoaderConfig.config.erroeImg=id;
+            imageLoaderConfig.config.errorImg=id;
             return this;
         }
 

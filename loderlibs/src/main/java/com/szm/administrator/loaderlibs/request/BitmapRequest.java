@@ -7,6 +7,7 @@ import com.szm.administrator.loaderlibs.cache.api.ImageListener;
 import com.szm.administrator.loaderlibs.config.DisplayConfig;
 import com.szm.administrator.loaderlibs.config.ImageLoaderConfig;
 import com.szm.administrator.loaderlibs.policy.api.LoadPolicy;
+import com.szm.administrator.loaderlibs.utils.MD5Utils;
 
 /**
  * 请求对象,实现Comparable需要重写equals和hashcode方法
@@ -28,6 +29,8 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
     public ImageListener listener;
     //图片路径
     private String imgUri;
+    //加密后的路径
+    private String imageUriMD5;
 
 
     public BitmapRequest(ImageView imageView, String uri, DisplayConfig displayConfig, ImageListener imageListener, ImageLoaderConfig config){
@@ -39,6 +42,7 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
         this.imageView=imageView;
         listener=imageListener;
         imgUri=uri;
+        imageUriMD5= MD5Utils.toMD5(uri);
     }
 
     /**
@@ -95,6 +99,14 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
      */
     public String getImgUri() {
         return imgUri;
+    }
+
+    /**
+     * 获取加密后的路径
+     * @return
+     */
+    public String getImageUriMD5() {
+        return imageUriMD5;
     }
 
     @Override

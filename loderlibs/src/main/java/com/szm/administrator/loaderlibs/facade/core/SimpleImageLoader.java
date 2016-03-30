@@ -39,6 +39,5 @@ public class SimpleImageLoader implements LoaderAPI {
     @Override
     public void disPlayImage(ImageView imageView, String url, DisplayConfig displayConfig, ImageListener listener) {
         queue.addRequest(new BitmapRequest(imageView,url,displayConfig,listener,config));
-
     }
 }
