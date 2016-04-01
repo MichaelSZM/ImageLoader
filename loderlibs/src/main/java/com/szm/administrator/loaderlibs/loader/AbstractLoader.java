@@ -51,7 +51,10 @@ public abstract class AbstractLoader implements LoaderAPI {
      * @param bitmap
      */
     private void deliverToUiThread(final BitmapRequest request, final Bitmap bitmap) {
-        final ImageView imageView=request.getImageView();
+        final ImageView imageView=request.getImageViewRef();
+        if(imageView==null){
+            return;
+        }
         imageView.post(new Runnable() {
             @Override
             public void run() {
@@ -67,8 +70,8 @@ public abstract class AbstractLoader implements LoaderAPI {
      * @param bitmap
      */
     private void updateImageview(BitmapRequest request, Bitmap bitmap) {
-        final ImageView imageView=request.getImageView();
-        if(bitmap!=null){//正常显示
+        final ImageView imageView=request.getImageViewRef();
+        if(bitmap!=null&&imageView!=null&&request.getImgUri().equals(imageView.getTag())){//正常显示,判断tag是否一样
             imageView.setImageBitmap(bitmap);
         }
         if(bitmap==null&&displayConfig.hasSetErrorgImg()){//加载失败，显示错误图片
@@ -107,7 +110,7 @@ public abstract class AbstractLoader implements LoaderAPI {
      */
     private void showLoadingImg(BitmapRequest request){
         if(displayConfig!=null&&displayConfig.hasSetLoadingImg()){
-            final ImageView imageView=request.getImageView();
+            final ImageView imageView=request.getImageViewRef();
             imageView.post(new Runnable() {
                 @Override
                 public void run() {

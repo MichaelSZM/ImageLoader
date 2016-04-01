@@ -10,29 +10,33 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.szm.administrator.loaderlibs.cache.MemoryCache;
+import com.szm.administrator.loaderlibs.config.ImageLoaderConfig;
+import com.szm.administrator.loaderlibs.facade.api.LoaderAPI;
+import com.szm.administrator.loaderlibs.facade.core.SimpleImageLoader;
+import com.szm.administrator.loaderlibs.policy.SerialPolicy;
+
 public class MainActivity extends AppCompatActivity {
+
+    LoaderAPI imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListView listview = (ListView) findViewById(R.id.listview);
-//        listview.setAdapter(new MyAdapter(this));
-//        ImageLoaderConfig config=
-//                ImageLoaderConfig.Builder builder=new ImageLoaderConfig.Builder();
-//        builder.setBitmapCache(DiskCache.getInStance());
-//        LoaderAPI api= SimpleImageLoader.getInstance();
+        listview.setAdapter(new MyAdapter(this));
 
-//        ImageLoaderConfig.Builder build = new ImageLoaderConfig.Builder();
-//        build.setThreadCount(3) //线程数量
-//                .setLoadPolicy(new SerialPolicy()) //加载策略
-//                .setCachePolicy(new MemoryCache()) //缓存策略
-//                .setLoadingPlaceHolder(R.drawable.loading)
-//                .setFailedPlaceHolder(R.drawable.not_found);
-//
-//        ImageLoaderConfig config = build.build();
-//        //初始化
-//        imageLoader = SimpleImageLoader.getInstance(config);
+        ImageLoaderConfig.Builder build = new ImageLoaderConfig.Builder();
+        build.setThreadCount(3) //线程数量
+              .setLoadPolicy(new SerialPolicy()) //加载策略
+              .setBitmapCache(new MemoryCache()) //缓存策略
+              .setLoadingImg(R.drawable.loading)
+              .setErroeImg(R.drawable.error);
+
+        ImageLoaderConfig config = build.build();
+        //初始化
+        imageLoader = SimpleImageLoader.getInstance(config);
 
     }
 
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             View item = inflater.inflate(R.layout.item, null);
             ImageView imageView = (ImageView) item.findViewById(R.id.iv);
             //请求图片
-//            imageLoader.displayImage(imageView, imageThumbUrls[position]);
+            imageLoader.disPlayImage(imageView, imageThumbUrls[position],null);
             return item;
         }
     }

@@ -8,7 +8,7 @@ import com.szm.administrator.loaderlibs.loader.api.LoaderAPI;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * 转发器
+ * 转发器,不断从请求队列中获取请求处理
  * Created by michael on 2016/3/10.
  */
 public class RequestDispatcher extends Thread{
@@ -26,9 +26,10 @@ public class RequestDispatcher extends Thread{
             //从队列中获取优先级最高的请求处理
             try {
                 BitmapRequest bitmapRequest=requestQueue.take();
-                Log.i("info--","deal request with serialNO: "+bitmapRequest.getSerialNO());
+                Log.i("info--","deal request with serialNO: "+bitmapRequest.getSerialNO()+"------"+bitmapRequest.getImgUri());
                 //解析图片地址，获取对象的加载器
                 String schema=parseSchema(bitmapRequest.getImgUri());
+                Log.i("info--","schema: "+bitmapRequest.getSerialNO()+"------"+schema);
                 LoaderAPI loader=LoaderManager.getInstance().getLoader(schema);
                 loader.loadBitmap(bitmapRequest);
             } catch (InterruptedException e) {
@@ -43,8 +44,8 @@ public class RequestDispatcher extends Thread{
      * @return
      */
     private String parseSchema(String imgUri) {
-        if(imgUri.contains("//")){
-            return imgUri.split("//")[0];
+        if(imgUri.contains("://")){
+            return imgUri.split("://")[0];
         }else{
             Log.i("michael","schema 不符合格式");
         }

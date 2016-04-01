@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class LoaderManager {
 
-    private Map<String,LoaderAPI> mapLoader=new HashMap<String,LoaderAPI>();
+    private Map<String,LoaderAPI> mapLoader=new HashMap<>();
 
     private static LoaderManager loaderManager=new LoaderManager();
 

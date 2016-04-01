@@ -3,7 +3,6 @@ package com.szm.administrator.loaderlibs.facade.api;
 import android.widget.ImageView;
 
 import com.szm.administrator.loaderlibs.cache.api.ImageListener;
-import com.szm.administrator.loaderlibs.config.DisplayConfig;
 
 /**
  * 加载图片的api
@@ -11,13 +10,20 @@ import com.szm.administrator.loaderlibs.config.DisplayConfig;
  */
 public interface LoaderAPI {
 
+
     /**
      * 显示图片到控件上
      * @param imageView
      * @param url
-     * @param config
+     */
+    void displayImage(ImageView imageView, String url);
+
+    /**
+     * 显示图片到控件上
+     * @param imageView
+     * @param url
      * @param listener
      */
-    void disPlayImage(ImageView imageView, String url, DisplayConfig config, ImageListener listener);
+    void disPlayImage(ImageView imageView, String url, ImageListener listener);
 
 }

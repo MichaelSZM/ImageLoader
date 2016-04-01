@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RequestQueue {
 
     //请求队列
-    private BlockingQueue<BitmapRequest> requestQueue=new PriorityBlockingQueue<BitmapRequest>();
+    private BlockingQueue<BitmapRequest> requestQueue=new PriorityBlockingQueue<>();
     //线程数
     private int threadCount;
 
@@ -68,7 +68,9 @@ public class RequestQueue {
         if(!requestQueue.contains(request)){
             request.setSerialNO(ai.incrementAndGet());
             requestQueue.add(request);
-            Log.i("info--","add request to queue "+request.getSerialNO());
+            Log.i("info--","add request to queue "+request.getSerialNO()+request.getImgUri());
+        }else{
+            Log.i("info--","request already exists "+request.getSerialNO()+request.getImgUri());
         }
     }
 

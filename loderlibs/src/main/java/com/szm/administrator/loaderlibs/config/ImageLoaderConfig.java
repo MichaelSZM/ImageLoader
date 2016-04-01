@@ -1,6 +1,8 @@
 package com.szm.administrator.loaderlibs.config;
 
+import com.szm.administrator.loaderlibs.cache.NoCache;
 import com.szm.administrator.loaderlibs.cache.api.BitmapCacheAPI;
+import com.szm.administrator.loaderlibs.policy.SerialPolicy;
 import com.szm.administrator.loaderlibs.policy.api.LoadPolicy;
 
 /**
@@ -18,7 +20,11 @@ public class ImageLoaderConfig {
     //图片显示配置
     private DisplayConfig config;
 
-    private ImageLoaderConfig(){};
+    private ImageLoaderConfig(){
+        bitmapCache=new NoCache();
+        loadPolicy=new SerialPolicy();
+        config=new DisplayConfig();
+    };
 
     /**
      * 构建者，负责创建ImageLoaderConfig对象
@@ -111,5 +117,13 @@ public class ImageLoaderConfig {
      */
     public int getThreadCount() {
         return threadCount;
+    }
+
+    /**
+     * 获取显示配置
+     * @return
+     */
+    public DisplayConfig getConfig() {
+        return config;
     }
 }

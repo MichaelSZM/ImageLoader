@@ -9,6 +9,8 @@ import com.szm.administrator.loaderlibs.config.ImageLoaderConfig;
 import com.szm.administrator.loaderlibs.policy.api.LoadPolicy;
 import com.szm.administrator.loaderlibs.utils.MD5Utils;
 
+import java.lang.ref.SoftReference;
+
 /**
  * 请求对象,实现Comparable需要重写equals和hashcode方法
  * Created by michael on 2016/3/10.
@@ -22,9 +24,10 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
     //缓存策略
     private BitmapCacheAPI bitmapCacheAPI;
     //默认显示的图片
-    private DisplayConfig displayConfig=new DisplayConfig();
+    private DisplayConfig displayConfig;
     //显示控件
-    private ImageView imageView;
+    //当系统内存不足时，把引用的对象进行回收
+    private SoftReference<ImageView> imageViewRef;
     //监听回调
     public ImageListener listener;
     //图片路径
@@ -33,16 +36,18 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
     private String imageUriMD5;
 
 
-    public BitmapRequest(ImageView imageView, String uri, DisplayConfig displayConfig, ImageListener imageListener, ImageLoaderConfig config){
+    public BitmapRequest(ImageView imageView, String uri, ImageListener imageListener, ImageLoaderConfig config){
         loadPolicy=config.getLoadPolicy();
         bitmapCacheAPI=config.getBitmapCache();
-        if(displayConfig!=null){
-            this.displayConfig=displayConfig;
+        if(config.getConfig()!=null){
+            this.displayConfig=config.getConfig();
         }
-        this.imageView=imageView;
+        this.imageViewRef =new SoftReference<>(imageView);
         listener=imageListener;
         imgUri=uri;
         imageUriMD5= MD5Utils.toMD5(uri);
+        //解决快速滑动图片错位
+        imageView.setTag(imgUri);
     }
 
     /**
@@ -89,8 +94,11 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
      * 获取显示控件
      * @return
      */
-    public ImageView getImageView() {
-        return imageView;
+    public ImageView getImageViewRef() {
+        if(imageViewRef!=null){
+            return imageViewRef.get();
+        }
+        return null;
     }
 
     /**
@@ -124,7 +132,16 @@ public class BitmapRequest implements Comparable<BitmapRequest>{
         if (serialNO != that.serialNO) return false;
         if (loadPolicy != null ? !loadPolicy.equals(that.loadPolicy) : that.loadPolicy != null)
             return false;
-        return bitmapCacheAPI != null ? bitmapCacheAPI.equals(that.bitmapCacheAPI) : that.bitmapCacheAPI == null;
+        if (bitmapCacheAPI != null ? !bitmapCacheAPI.equals(that.bitmapCacheAPI) : that.bitmapCacheAPI != null)
+            return false;
+        if (displayConfig != null ? !displayConfig.equals(that.displayConfig) : that.displayConfig != null)
+            return false;
+        if (imageViewRef != null ? !imageViewRef.equals(that.imageViewRef) : that.imageViewRef != null)
+            return false;
+        if (listener != null ? !listener.equals(that.listener) : that.listener != null)
+            return false;
+        if (imgUri != null ? !imgUri.equals(that.imgUri) : that.imgUri != null) return false;
+        return imageUriMD5 != null ? imageUriMD5.equals(that.imageUriMD5) : that.imageUriMD5 == null;
 
     }
 

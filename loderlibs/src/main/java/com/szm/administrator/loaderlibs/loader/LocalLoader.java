@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import com.szm.administrator.loaderlibs.loader.utils.BitmapDecoder;
+import com.szm.administrator.loaderlibs.loader.utils.ImageViewHelper;
 import com.szm.administrator.loaderlibs.request.BitmapRequest;
 
 import java.io.File;
@@ -21,11 +23,17 @@ public class LocalLoader extends AbstractLoader{
      */
     @Override
     protected Bitmap onLoad(BitmapRequest request) {
-        String path= Uri.parse(request.getImgUri()).getPath();
+        final String path= Uri.parse(request.getImgUri()).getPath();
         File file=new File(path);
-        if(file.exists()){
-            return BitmapFactory.decodeFile(path);
+        if(!file.exists()){
+            return null;
         }
-        return null;
+        BitmapDecoder decoder=new BitmapDecoder() {
+            @Override
+            protected Bitmap decodeBitmapWithOption(BitmapFactory.Options options) {
+                return BitmapFactory.decodeFile(path,options);
+            }
+        };
+        return decoder.decodeBitmap(ImageViewHelper.getImageViewWidth(request.getImageViewRef()),ImageViewHelper.getImageViewHeight(request.getImageViewRef()));
     }
 }

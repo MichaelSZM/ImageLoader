@@ -3,7 +3,6 @@ package com.szm.administrator.loaderlibs.facade.core;
 import android.widget.ImageView;
 
 import com.szm.administrator.loaderlibs.cache.api.ImageListener;
-import com.szm.administrator.loaderlibs.config.DisplayConfig;
 import com.szm.administrator.loaderlibs.config.ImageLoaderConfig;
 import com.szm.administrator.loaderlibs.facade.api.LoaderAPI;
 import com.szm.administrator.loaderlibs.request.BitmapRequest;
@@ -37,7 +36,13 @@ public class SimpleImageLoader implements LoaderAPI {
     }
 
     @Override
-    public void disPlayImage(ImageView imageView, String url, DisplayConfig displayConfig, ImageListener listener) {
-        queue.addRequest(new BitmapRequest(imageView,url,displayConfig,listener,config));
+    public void displayImage(ImageView imageView, String url){
+        disPlayImage(imageView,url,null);
+    }
+
+
+    @Override
+    public void disPlayImage(ImageView imageView, String url, ImageListener listener) {
+        queue.addRequest(new BitmapRequest(imageView,url,listener,config));
     }
 }

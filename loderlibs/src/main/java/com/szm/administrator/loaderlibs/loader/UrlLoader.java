@@ -3,8 +3,11 @@ package com.szm.administrator.loaderlibs.loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.szm.administrator.loaderlibs.loader.utils.BitmapDecoder;
+import com.szm.administrator.loaderlibs.loader.utils.ImageViewHelper;
 import com.szm.administrator.loaderlibs.request.BitmapRequest;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -27,8 +30,24 @@ public class UrlLoader extends AbstractLoader{
         InputStream in=null;
         try {
             connection= (HttpURLConnection) new URL(request.getImgUri()).openConnection();
-            in=connection.getInputStream();
-            return BitmapFactory.decodeStream(in);
+            in=new BufferedInputStream(connection.getInputStream());
+            in.mark(in.available());
+            final InputStream inputStream=in;
+            BitmapDecoder decoder=new BitmapDecoder() {
+                @Override
+                protected Bitmap decodeBitmapWithOption(BitmapFactory.Options options) {
+                    Bitmap bitmap=BitmapFactory.decodeStream(inputStream,null,options);
+                    if(options.inJustDecodeBounds){
+                        try {
+                            inputStream.reset();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return bitmap;
+                }
+            };
+            return decoder.decodeBitmap(ImageViewHelper.getImageViewWidth(request.getImageViewRef()),ImageViewHelper.getImageViewHeight(request.getImageViewRef()));
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -45,4 +64,5 @@ public class UrlLoader extends AbstractLoader{
         }
         return null;
     }
+
 }
