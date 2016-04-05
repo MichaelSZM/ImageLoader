@@ -16,9 +16,9 @@ public class LoaderManager {
     private static LoaderManager loaderManager=new LoaderManager();
 
     private LoaderManager(){
-        registeLoader("http",new UrlLoader());
-        registeLoader("https",new UrlLoader());
-        registeLoader("file",new LocalLoader());
+        registeLoader("http",new UrlLoader2());
+        registeLoader("https",new UrlLoader2());
+        registeLoader("file",new LocalLoader2());
     }
 
     public static LoaderManager getInstance(){

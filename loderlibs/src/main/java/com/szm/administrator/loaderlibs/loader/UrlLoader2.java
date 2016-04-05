@@ -3,8 +3,6 @@ package com.szm.administrator.loaderlibs.loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.szm.administrator.loaderlibs.loader.utils.BitmapDecoder;
-import com.szm.administrator.loaderlibs.loader.utils.ImageViewHelper;
 import com.szm.administrator.loaderlibs.request.BitmapRequest;
 
 import java.io.BufferedInputStream;
@@ -15,10 +13,9 @@ import java.net.URL;
 
 /**
  * 加载网络图片的实现类
- * 做了图片的压缩处理，不过5.0系统好像不支持in.mark()方法，所以这个留着以后研究
  * Created by michael on 2016/3/15.
  */
-public class UrlLoader extends AbstractLoader{
+public class UrlLoader2 extends AbstractLoader{
     /**
      * 加载图片的方法
      *
@@ -32,23 +29,7 @@ public class UrlLoader extends AbstractLoader{
         try {
             connection= (HttpURLConnection) new URL(request.getImgUri()).openConnection();
             in=new BufferedInputStream(connection.getInputStream());
-            in.mark(in.available());
-            final BufferedInputStream inputStream= (BufferedInputStream) in;
-            BitmapDecoder decoder=new BitmapDecoder() {
-                @Override
-                protected Bitmap decodeBitmapWithOption(BitmapFactory.Options options) {
-                    Bitmap bitmap=BitmapFactory.decodeStream(inputStream,null,options);
-                    if(options.inJustDecodeBounds){
-                        try {
-                            inputStream.reset();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return bitmap;
-                }
-            };
-            return decoder.decodeBitmap(ImageViewHelper.getImageViewWidth(request.getImageViewRef()),ImageViewHelper.getImageViewHeight(request.getImageViewRef()));
+            return BitmapFactory.decodeStream(in);
         } catch (IOException e) {
             e.printStackTrace();
         }finally {

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -68,6 +69,20 @@ public class BitmapDeal {
             }
         }
         return inSampleSize;
+    }
+
+    /**
+     * 计算缩放因子
+     * @param file
+     * @param reqWidth
+     * @param reqHeight
+     * @return
+     */
+    public static int getZoomFactor(File file,int reqWidth,int reqHeight){
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(),options);
+        return calculateInSampleSize(options,reqWidth,reqHeight);
     }
 
 }

@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.szm.administrator.loaderlibs.cache.MemoryCache;
+import com.szm.administrator.loaderlibs.cache.DoubleCache;
 import com.szm.administrator.loaderlibs.config.ImageLoaderConfig;
 import com.szm.administrator.loaderlibs.facade.api.LoaderAPI;
 import com.szm.administrator.loaderlibs.facade.core.SimpleImageLoader;
@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
         ImageLoaderConfig.Builder build = new ImageLoaderConfig.Builder();
         build.setThreadCount(3) //线程数量
               .setLoadPolicy(new SerialPolicy()) //加载策略
-              .setBitmapCache(new MemoryCache()) //缓存策略
+//              .setBitmapCache(new MemoryCache()) //缓存策略
+//                .setBitmapCache(DiskCache.getInStance(this))
+                .setBitmapCache(new DoubleCache(this))
               .setLoadingImg(R.drawable.loading)
               .setErroeImg(R.drawable.error);
 

@@ -153,8 +153,10 @@ public class DiskCache implements BitmapCacheAPI{
         InputStream in=null;
         try {
             DiskLruCache.Snapshot snapShort= mDiskLruCache.get(request.getImageUriMD5());
-            in=snapShort.getInputStream(0);
-            return BitmapFactory.decodeStream(in);
+            if(snapShort!=null){
+                in=snapShort.getInputStream(0);
+                return BitmapFactory.decodeStream(in);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
